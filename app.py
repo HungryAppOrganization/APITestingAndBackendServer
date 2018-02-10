@@ -6,21 +6,25 @@ from os import environ
 
 from flask import Flask
 from flask import render_template
-
-app = Flask(__name__)
-
-"""
-Example python app with the Flask framework: http://flask.pocoo.org/
-"""
-
-from os import environ
-
-from flask import Flask
-from flask import render_template
 #import jsonify
 #from jsonify import *
 from flask import *
 app = Flask(__name__)
+
+from trans_db import *
+
+myDb = TransDBConnector()
+myDb.connect()
+
+
+@app.route('/api/get_next_card', methods = ['POST'])
+def get_next_card():
+    print("Getting next card.....")
+    json = myDb.getNextCard()
+    print("returning:")
+    print(json)
+    return jsonify({'card':json})
+
 
 @app.route('/api/get_message', methods = ['POST'])
 def get_messages():
