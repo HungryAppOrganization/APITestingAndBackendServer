@@ -1,7 +1,7 @@
 import pyrebase
 import os
 from dotenv import load_dotenv
-
+import random
 
 dotenv_path = ".env"
 load_dotenv(dotenv_path, verbose=True)
@@ -119,7 +119,9 @@ class TransDBConnector:
         return idAssos
 
     def getNextCard(self):
-        val = self.db.child("foods_kc").order_by_child("id").equal_to(140).get().val().values()[0]
+        #Right now just give it a random number.
+        idToGet = random.randint(50,350)
+        val = self.db.child("foods_kc").order_by_child("id").equal_to(idToGet).get().val().values()[0]
         return val
 
 
