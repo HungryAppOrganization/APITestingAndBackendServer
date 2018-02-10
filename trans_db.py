@@ -123,7 +123,7 @@ class TransDBConnector:
         return val
 
 
-if __name == "__main__":
+if __name__ == "__main__":
     print "Testing Database...."
 
     myDb = TransDBConnector()
