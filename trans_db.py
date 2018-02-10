@@ -119,7 +119,7 @@ class TransDBConnector:
         return idAssos
 
     def getNextCard(self):
-        val = self.db.child("foods_kc").order_by_child("id").equal_to(4).get().val().values()
+        val = self.db.child("foods_kc").order_by_child("id").equal_to(4).get().val().values()[0]
         return val
 
 
