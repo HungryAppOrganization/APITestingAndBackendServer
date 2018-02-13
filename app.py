@@ -9,6 +9,7 @@ from flask import render_template
 #import jsonify
 #from jsonify import *
 from flask import *
+import random
 app = Flask(__name__)
 
 from trans_db import *
@@ -16,11 +17,21 @@ from trans_db import *
 myDb = TransDBConnector()
 myDb.connect()
 
+@app.route('/api/login_method', methods = ['POST'])
+def login_method():
+    print("Logging user in and storing the phone data")
+    pass
+    return jsonify({'result':'true'})
+
 
 @app.route('/api/get_next_card', methods = ['POST'])
 def get_next_card():
     print("Getting next card.....")
     json = myDb.getNextCard()
+    print("myNUm:",session['myNumber'])
+    session['myNumber'] = random.randint(50,350)
+    print("myNUm:",session['myNumber'])
+
     print("returning:")
     print(json)
     return jsonify({'card':json})
