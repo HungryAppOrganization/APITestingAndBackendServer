@@ -26,6 +26,7 @@ def login_method():
     json = request.get_json()
     print("My json:", json)
     print("Logging user in and storing the phone data")
+    session['myNumber'] = random.randint(50,350)
 
     pass
     return jsonify({'result':'true'})
@@ -104,5 +105,7 @@ def index_2():
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
     port = 5000#int(environ.get('PORT', 5000))
+
     app.debug = True
+    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT2390293023'
     app.run(host='0.0.0.0', port=port)
