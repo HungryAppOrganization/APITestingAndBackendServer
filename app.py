@@ -13,6 +13,7 @@ import random
 app = Flask(__name__)
 
 from trans_db import *
+from test_server import *
 
 myDb = TransDBConnector()
 myDb.connect()
