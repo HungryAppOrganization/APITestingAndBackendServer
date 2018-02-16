@@ -27,13 +27,14 @@ class ServerConnector:
 
     def loadValues(self):
         
-        reader = csv.DictReader(open("smallDBTest.csv"))
+        reader = csv.DictReader(open("largeDBTest.csv",'rU'))
         allItemCategories = []
         allItems = []
         for row in reader:
             #print(row)
             allItems.append(row)
             myRow = row
+            print(row)
 
             #Add all the items to the allItemCategories
             allItemCategories.append(row['Item1'])
@@ -42,6 +43,10 @@ class ServerConnector:
             allItemCategories.append(row['Item4'])
             allItemCategories.append(row['Item5'])
             allItemCategories.append(row['Item6'])
+            allItemCategories.append(row['Item7'])
+            allItemCategories.append(row['Item8'])
+            allItemCategories.append(row['Item9'])
+
             allItemCategories.append(row['Genre'])
             allItemCategories.append(row['Class'])
             allItemCategories.append(row['Type_of_meal'])
@@ -50,14 +55,11 @@ class ServerConnector:
         priceMean = sum([float(x['Price'].replace('$','')) for x in allItems])/len(allItems)
         priceUp =max([abs(float(x['Price'].replace('$',''))-priceMean) for x in allItems])
         #print(priceUp)
-        zipMean = sum([float(x['Zipcode'].replace('$','')) for x in allItems])/len(allItems)
-        zipUp =max([abs(float(x['Zipcode'].replace('$',''))-zipMean) for x in allItems])
         for i in xrange(0,len(allItems)):
             allItems[i]['Price'] = (float(allItems[i]['Price'].replace('$','')) - priceMean)/priceUp
-            allItems[i]['Zipcode'] = (float(allItems[i]['Zipcode']) - zipMean)/zipUp
             myRow = allItems[i]
         allItemCategories = cleanList(allItemCategories)
-        evalMethod = ['Zipcode','Price']
+        evalMethod = ['Price']
         allVecs = []
         for myRow in allItems:
             myRowVec = convertRawToVec(allItemCategories,myRow,evalMethod)

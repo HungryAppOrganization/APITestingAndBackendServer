@@ -26,6 +26,9 @@ def login_method():
     json = request.get_json()
     print("My json:", json)
     print("Logging user in and storing the phone data")
+    servercon.login(str(json['username']))
+
+
     session['myNumber'] = random.randint(50,350)
     print("myNUm:",session['myNumber'])
 
@@ -38,8 +41,10 @@ def get_next_card():
     json = request.get_json()
     print("My json:", json)
 
+
     print("Getting next card.....")
-    idToGet = 5
+    idToGet = int(servercon.getCardId(str(json['username'])))
+
     json = myDb.getNextCard(idToGet)
     json['id'] = idToGet
     print("myNUm:",session['myNumber'])
@@ -55,17 +60,17 @@ def get_next_card():
 def swipe_card():
     json = request.get_json()
     print("My json:", json)
+    print("Swiping card....")
+    servercon.swipeCard(str(json['username']),int(json['cardId']),int(json['swipeChoice']))
+
 
     print("Getting next card.....")
-    idToGet = 5
-    json = myDb.getNextCard(idToGet)
     print("myNUm:",session['myNumber'])
     session['myNumber'] = random.randint(50,350)
     print("myNUm:",session['myNumber'])
 
     print("returning:")
-    print(json)
-    return jsonify({'card':json})
+    return jsonify({'success':True})
 
 
 @app.route('/api/get_message', methods = ['POST'])
@@ -105,7 +110,7 @@ def index_2():
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = 5000#int(environ.get('PORT', 5000))
+    port = 5000#int(environ.get('PORT', 5000)
 
     app.debug = True
     app.secret_key = 'A0Zr98j/3yH!jmN]LWX/,?RT2390293023'
