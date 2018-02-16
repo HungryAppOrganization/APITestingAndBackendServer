@@ -17,17 +17,45 @@ from trans_db import *
 myDb = TransDBConnector()
 myDb.connect()
 
+servercon = ServerConnector(myDb)
+
+#Should pass the phoneName
 @app.route('/api/login_method', methods = ['POST'])
 def login_method():
+    json = request.get_json()
+    print("My json:", json)
     print("Logging user in and storing the phone data")
+
     pass
     return jsonify({'result':'true'})
 
-
+#Pass phoneName
 @app.route('/api/get_next_card', methods = ['POST'])
 def get_next_card():
+    json = request.get_json()
+    print("My json:", json)
+
     print("Getting next card.....")
-    json = myDb.getNextCard()
+    idToGet = 5
+    json = myDb.getNextCard(idToGet)
+    json['id'] = idToGet
+    print("myNUm:",session['myNumber'])
+    session['myNumber'] = random.randint(50,350)
+    print("myNUm:",session['myNumber'])
+
+    print("returning:")
+    print(json)
+    return jsonify({'card':json})
+
+#Pass cardId,swipeChoice,and phoneName
+@app.route('/api/swipe_card', methods = ['POST'])
+def swipe_card():
+    json = request.get_json()
+    print("My json:", json)
+
+    print("Getting next card.....")
+    idToGet = 5
+    json = myDb.getNextCard(idToGet)
     print("myNUm:",session['myNumber'])
     session['myNumber'] = random.randint(50,350)
     print("myNUm:",session['myNumber'])
@@ -39,6 +67,9 @@ def get_next_card():
 
 @app.route('/api/get_message', methods = ['POST'])
 def get_messages():
+    json = request.get_json()
+    print("My json:", json)
+
     print("Getting message.....")
     json = request.get_json()
     print("My json:", json)

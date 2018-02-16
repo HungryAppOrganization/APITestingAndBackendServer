@@ -2,6 +2,8 @@ import pyrebase
 import os
 from dotenv import load_dotenv
 import random
+import numpy as np
+from datetime import datetime
 
 dotenv_path = ".env"
 load_dotenv(dotenv_path, verbose=True)
@@ -118,11 +120,48 @@ class TransDBConnector:
         print("next id: " , idAssos)
         return idAssos
 
-    def getNextCard(self):
-        #Right now just give it a random number.
-        idToGet = random.randint(50,350)
+    def getNextCard(self,idToGet=None):
+        if idToGet == None:
+            idToGet = random.randint(50,350)
         val = self.db.child("foods_kc").order_by_child("id").equal_to(idToGet).get().val().values()[0]
         return val
+
+    def getAllUsers(self):
+        #This returns all the users in a list of the usernames
+        vals = self.db.child("users").get().val().values()
+        usernames = [str(val['username']) for val in vals]
+        print(usernames)
+        return usernames
+
+    def getUserSwipes(self,userName,numberItems):
+        user_swipes = np.zeros(numberItems)
+        #Now get the swipes
+        print("username: " , userName)
+        val = self.db.child("users").order_by_child("username").equal_to(userName).get().val().values()[0]['swipes'].values()
+        for swipe in val:
+            listId = int(swipe['cardID'])
+            user_swipes[listId] = float(swipe['swipe'])
+        print("Val is: " , val)
+        return user_swipes
+
+    def updateSwipes(self,cardSwipe,swipeChoice,phone_name):
+        pass
+
+        data = {"cardID":cardSwipe,"swipe":swipeChoice,"time":str(datetime.now())}
+
+        #self.db.child("users").order_by_child("username").equal_to(phone_name).child("swipes").push(data)
+        userName = self.db.child("users").order_by_child("username").equal_to(phone_name).get().val().keys()[0]
+
+        self.db.child("users").child(userName).child("swipes").push(data)
+
+        print("Done updating swipes....")
+
+    def createUser(self,phone_name):
+        data = {"username":phone_name,"swipes":{"first":{"cardID":1,"swipe":1,"time":str(datetime.now())}}}
+        self.db.child("users").push(data)
+        
+
+
 
 
 if __name__ == "__main__":
@@ -130,13 +169,24 @@ if __name__ == "__main__":
 
     myDb = TransDBConnector()
     myDb.connect()
-    myDb.addAddress("2726 S Campbell Ave","Springfield","MO","65807")
+    users = myDb.getAllUsers()
+
+    #print(myDb.getUserSwipes(users[0],100))
+    myDb.updateSwipes(5,1,"iggy")
+    #userName = myDb.db.child("users").order_by_child("username").equal_to("iggy").get().val().keys()[0]
+
+    #myDb.db.child("users").child(userName).child("swipes").push(data)
+
+    #print(myDb.db.child("users").order_by_child("username").equal_to("iggy").get().val().keys()[0])
+
+    #myDb.addAddress("2726 S Campbell Ave","Springfield","MO","65807")
+
 
     #Example Queries
-    myDb.db.child("address").order_by_child('id').limit_to_last(10).remove()
+    #myDb.db.child("address").order_by_child('id').limit_to_last(10).remove()
 
     #Example User Remove
-    db.child("users").child("Morty").remove()
+    #db.child("users").child("Morty").remove()
 
 
 
