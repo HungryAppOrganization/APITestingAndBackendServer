@@ -159,9 +159,6 @@ class TransDBConnector:
     def createUser(self,phone_name):
         data = {"username":phone_name,"swipes":{"first":{"cardID":1,"swipe":1,"time":str(datetime.now())}}}
         self.db.child("users").push(data)
-        
-
-
 
 
 if __name__ == "__main__":

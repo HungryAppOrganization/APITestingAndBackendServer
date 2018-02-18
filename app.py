@@ -80,6 +80,21 @@ def swipe_card():
     print("returning:")
     return jsonify({'success':True})
 
+@app.route('/api/swipe_andGetID',methods=['POST'])
+def swipe_and_get():
+    json = request.get_json()
+
+    tempUser = str(''.join([i if ord(i) < 128 else ' ' for i in json['username']]))
+    idToGet = servercon.swipe_and_getID(int(json['cardId']),int(json['swipeChoice']),tempUser)
+
+    json = myDb.getNextCard(idToGet)
+    json['id'] = idToGet
+
+    print("returning:")
+    print(json)
+    return jsonify({'card':json})
+
+
 
 @app.route('/api/get_message', methods = ['POST'])
 def get_messages():

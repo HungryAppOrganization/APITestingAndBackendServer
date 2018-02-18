@@ -146,6 +146,33 @@ class ServerConnector:
         self.myDb.updateSwipes(card,float(swipeChoice),phone_name)
         return None
 
+    #This method sends the swipe, and stores the new card. 
+    def swipe_and_getID(self,card,swipeChoice,phone_name):
+        print("Swiping: " , card , " for: " , swipeChoice , " on: " , phone_name)
+
+        self.user_swipes[phone_name][card] = float(swipeChoice)
+        self.user_vector[phone_name] = computeUserVectorWithAverage(self.user_swipes[phone_name],self.item_vectors)
+        #Now to find similarities, I just find the dot product between that and all the items
+        allItemsRanked = rankItems(self.user_vector[phone_name],self.item_vectors)
+        #Now we have everything ranked. I want to put it into a dictionary of name: rank. 
+        #We will then take the highest that is not
+        self.nextItems[phone_name] = genNext(allItemsRanked,self.allItems,self.user_swipes[phone_name],exploration_rate=0.4)
+        #This is so the next card is not seen.
+        self.user_swipes[phone_name][self.nextItems[phone_name]] = float(.001)
+        print("Next card is now: " , self.nextItems[phone_name])
+        self.myDb.updateSwipes(card,float(swipeChoice),phone_name)
+
+        #Now the nextItem
+        ranNum = random.uniform(0, 1)
+        print("my random number: " , ranNum)
+        retVal = 0 
+        if (ranNum < 0.1):
+            retVal = int(random.uniform(0,100))
+        else:
+            retVal = self.nextItems[phone_name]
+        print("Returning: " , retVal)
+        return retVal
+
 print("Done Loading...")
 
 
