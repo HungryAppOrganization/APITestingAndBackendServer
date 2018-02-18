@@ -141,7 +141,7 @@ class ServerConnector:
         #We will then take the highest that is not
         self.nextItems[phone_name] = genNext(allItemsRanked,self.allItems,self.user_swipes[phone_name],exploration_rate=0.4)
         #This is so the next card is not seen.
-        self.user_swipes[phone_name][card] = float(.001)
+        self.user_swipes[phone_name][self.nextItems[phone_name]] = float(.001)
         print("Next card is now: " , self.nextItems[phone_name])
         self.myDb.updateSwipes(card,float(swipeChoice),phone_name)
         return None
