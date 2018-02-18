@@ -26,11 +26,15 @@ def login_method():
     json = request.get_json()
     print("My json:", json)
     print("Logging user in and storing the phone data")
-    servercon.login(str(json['username']))
+    #tempUser = json['username'].decode('ascii','ignore')
+    tempUser = str(''.join([i if ord(i) < 128 else ' ' for i in json['username']]))
+    #tempUser = unicode(json['username']).replace("\r", " ").replace("\n", " ").replace("\t", '').replace("\"", "")
+    print(tempUser)
+    servercon.login(tempUser)
+    print("done logging in")
 
-
-    session['myNumber'] = random.randint(50,350)
-    print("myNUm:",session['myNumber'])
+    #session['myNumber'] = random.randint(50,350)
+    #print("myNUm:",session['myNumber'])
 
     pass
     return jsonify({'result':'true'})
@@ -43,13 +47,15 @@ def get_next_card():
 
 
     print("Getting next card.....")
-    idToGet = int(servercon.getCardId(str(json['username'])))
-
+    #tempUser = json['username'].encode('utf-8').strip()
+    tempUser = str(''.join([i if ord(i) < 128 else ' ' for i in json['username']]))
+    idToGet = int(servercon.getCardId(tempUser))
+    print("IdToReturn is: " , idToGet)
     json = myDb.getNextCard(idToGet)
     json['id'] = idToGet
-    print("myNUm:",session['myNumber'])
-    session['myNumber'] = random.randint(50,350)
-    print("myNUm:",session['myNumber'])
+    #print("myNUm:",session['myNumber'])
+    #session['myNumber'] = random.randint(50,350)
+    #print("myNUm:",session['myNumber'])
 
     print("returning:")
     print(json)
@@ -61,13 +67,15 @@ def swipe_card():
     json = request.get_json()
     print("My json:", json)
     print("Swiping card....")
-    servercon.swipeCard(str(json['username']),int(json['cardId']),int(json['swipeChoice']))
+    #tempUser = json['username'].encode('utf-8').strip()
+    tempUser = str(''.join([i if ord(i) < 128 else ' ' for i in json['username']]))
+    servercon.swipeCard(int(json['cardId']),int(json['swipeChoice']),tempUser)
 
 
     print("Getting next card.....")
-    print("myNUm:",session['myNumber'])
-    session['myNumber'] = random.randint(50,350)
-    print("myNUm:",session['myNumber'])
+    #print("myNUm:",session['myNumber'])
+    #session['myNumber'] = random.randint(50,350)
+    #print("myNUm:",session['myNumber'])
 
     print("returning:")
     return jsonify({'success':True})

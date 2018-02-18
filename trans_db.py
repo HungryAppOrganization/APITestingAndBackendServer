@@ -123,7 +123,7 @@ class TransDBConnector:
     def getNextCard(self,idToGet=None):
         if idToGet == None:
             idToGet = random.randint(50,350)
-        val = self.db.child("foods_kc").order_by_child("id").equal_to(idToGet).get().val().values()[0]
+        val = self.db.child("foods_kc_2_17").order_by_child("id").equal_to(idToGet).get().val().values()[0]
         return val
 
     def getAllUsers(self):

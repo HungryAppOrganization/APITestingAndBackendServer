@@ -27,14 +27,14 @@ class ServerConnector:
 
     def loadValues(self):
         
-        reader = csv.DictReader(open("largeDBTest.csv",'rU'))
+        reader = csv.DictReader(open("Rest_DB_2-DB_2_17_rm_foodspotter_csv.csv",'rU'))
         allItemCategories = []
         allItems = []
         for row in reader:
             #print(row)
             allItems.append(row)
             myRow = row
-            print(row)
+            #print(row)
 
             #Add all the items to the allItemCategories
             allItemCategories.append(row['Item1'])
@@ -46,12 +46,19 @@ class ServerConnector:
             allItemCategories.append(row['Item7'])
             allItemCategories.append(row['Item8'])
             allItemCategories.append(row['Item9'])
+            allItemCategories.append(row['Item10'])
+            allItemCategories.append(row['Item11'])
+            allItemCategories.append(row['Item12'])
 
             allItemCategories.append(row['Genre'])
             allItemCategories.append(row['Class'])
             allItemCategories.append(row['Type_of_meal'])
+            allItemCategories.append(row['Dietary'])
         #Now go through and fix the price/zipCode (normalize it)
         #print("AllItems: " , allItems)
+        for i in xrange(0,len(allItems)):
+            if str(allItems[i]['Price']) == "":
+		allItems[i]["Price"] = "$0.00" 
         priceMean = sum([float(x['Price'].replace('$','')) for x in allItems])/len(allItems)
         priceUp =max([abs(float(x['Price'].replace('$',''))-priceMean) for x in allItems])
         #print(priceUp)
@@ -63,7 +70,7 @@ class ServerConnector:
         allVecs = []
         for myRow in allItems:
             myRowVec = convertRawToVec(allItemCategories,myRow,evalMethod)
-            print(myRowVec)
+            #print(myRowVec)
             allVecs.append(myRowVec)
         self.item_vectors = np.array(allVecs)
 
@@ -82,7 +89,7 @@ class ServerConnector:
             allItemsRanked = rankItems(self.user_vector[user],self.item_vectors)
 
             self.nextItems[user] = genNext(allItemsRanked,self.allItems,self.user_swipes[user],exploration_rate=0.4)
-        print("All next items: " , self.nextItems)
+        #print("All next items: " , self.nextItems)
 
     # This logs into the server with the username specified.
     # This will also generate the first suggestion
@@ -92,7 +99,7 @@ class ServerConnector:
         print("Loging in: " , phone_name)
         ##Make sure the user is in the system, and preload first suggestion.
         allUsers = self.myDb.getAllUsers()
-        print("All Users: " , allUsers)
+        #print("All Users: " , allUsers)
         user = None
         if phone_name in allUsers:
             #It's already in it, preload but it should be ready
@@ -106,8 +113,6 @@ class ServerConnector:
         self.user_vector[user] = computeUserVectorWithAverage(self.user_swipes[user],self.item_vectors)
         allItemsRanked = rankItems(self.user_vector[user],self.item_vectors)
         self.nextItems[user] = genNext(allItemsRanked,self.allItems,self.user_swipes[user],exploration_rate=0.4)
-
-
         #This should load it into the 
         return None
         pass
@@ -115,6 +120,12 @@ class ServerConnector:
     # This will just return the associated next_item
     def getCardId(self,phone_name):
         print("Getting a card for: " , phone_name)
+        print("Card id is: " , self.nextItems[phone_name])
+        #Give it a 5% chance for randomness.
+        ranNum = random.uniform(0, 1)
+        print("my random number: " , ranNum)
+        if (ranNum < 0.1):
+              return int(random.uniform(0,100))
         return self.nextItems[phone_name]
         pass
     # This will update the userswipes then get a new card for them. 
@@ -129,7 +140,9 @@ class ServerConnector:
         #Now we have everything ranked. I want to put it into a dictionary of name: rank. 
         #We will then take the highest that is not
         self.nextItems[phone_name] = genNext(allItemsRanked,self.allItems,self.user_swipes[phone_name],exploration_rate=0.4)
-
+        #This is so the next card is not seen.
+        self.user_swipes[phone_name][card] = float(.001)
+        print("Next card is now: " , self.nextItems[phone_name])
         self.myDb.updateSwipes(card,float(swipeChoice),phone_name)
         return None
 

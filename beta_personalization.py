@@ -43,18 +43,18 @@ def getUserVector(allCats,extraCats):
     return newVec
 
 def computeUserVectorWithAverage(userSwipes,itemVectors):
-    print(userSwipes)
-    print(itemVectors)
+    #print(userSwipes)
+    #print(itemVectors)
     numSwipes = sum([abs(x) for x in userSwipes])
     res = np.matmul(userSwipes,itemVectors)/numSwipes
-    print("Results:",res)
+    #print("Results:",res)
     return res
 
 def rankItems(user_vector,item_vectors):
-    print(item_vectors[0])
-    print(np.matmul(user_vector,item_vectors[0]))
+    #print(item_vectors[0])
+    #print(np.matmul(user_vector,item_vectors[0]))
     res = np.matmul(user_vector,item_vectors.T)
-    print("RankResults:",res)
+    #print("RankResults:",res)
     return res
 
 #How this method will work is the following:
@@ -67,11 +67,11 @@ def genNext(all_ranks,allItems,user_swipes,exploration_rate=0.1):
     for i in xrange(0, len(all_ranks)):
         if user_swipes[i] == 0:
             new_ranks.append((i,all_ranks[i]))
-    print("New Ranks: " , new_ranks)
+    #print("New Ranks: " , new_ranks)
     new_ranks = sorted(new_ranks,key = lambda x: x[1])
-    print("Ranked ranks: " , new_ranks)
+    #print("Ranked ranks: " , new_ranks)
     ranNum = random.uniform(0, 1)
-    print("RandNum", ranNum, " Exploration:", exploration_rate)
+    #print("RandNum", ranNum, " Exploration:", exploration_rate)
     if (ranNum >= exploration_rate):
         return new_ranks[-1][0]
     else:
