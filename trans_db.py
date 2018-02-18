@@ -141,7 +141,7 @@ class TransDBConnector:
         for swipe in val:
             listId = int(swipe['cardID'])
             user_swipes[listId] = float(swipe['swipe'])
-        print("Val is: " , val)
+        #print("Val is: " , val)
         return user_swipes
 
     def updateSwipes(self,cardSwipe,swipeChoice,phone_name):

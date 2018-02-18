@@ -43,6 +43,8 @@ def login_method():
 @app.route('/api/get_next_card', methods = ['POST'])
 def get_next_card():
     json = request.get_json()
+
+    time.sleep(0.5)
     print("My json:", json)
 
 
