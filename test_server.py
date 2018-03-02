@@ -7,6 +7,7 @@ from trans_db import *
 #Is this per user or overall?
 #This should be overall. 
 
+
 class ServerConnector:
 
     # 
@@ -66,6 +67,8 @@ class ServerConnector:
             allItems[i]['Price'] = (float(allItems[i]['Price'].replace('$','')) - priceMean)/priceUp
             myRow = allItems[i]
         allItemCategories = cleanList(allItemCategories)
+        print(allItemCategories)
+        self.allItemCategories = allItemCategories
         evalMethod = ['Price']
         allVecs = []
         for myRow in allItems:
@@ -116,6 +119,31 @@ class ServerConnector:
         #This should load it into the 
         return None
         pass
+
+    #This prints a user's taste profile
+    def printTasteProfile(self,phone_name):
+        allUsers = self.myDb.getAllUsers()
+        #print("All Users: " , allUsers)
+        user = None
+        if phone_name in allUsers:
+            #It's already in it, preload but it should be ready
+            user = phone_name
+        else:
+            #Create the entry into the DB
+            self.myDb.createUser(phone_name)
+            #Then set the next one. 
+            user = phone_name
+
+        self.user_swipes[user] = self.myDb.getUserSwipes(user,len(self.item_vectors))
+        self.user_vector[user] = computeUserVectorWithAverage(self.user_swipes[user],self.item_vectors)
+        print()
+        print(self.user_vector[user])
+        print(self.allItemCategories)
+        return self.user_vector[user] , self.allItemCategories
+
+
+
+
 
     # This will just return the associated next_item
     def getCardId(self,phone_name):
@@ -197,6 +225,24 @@ def testLoginAndSwipeSome():
     print("recommend: " , card3)
 
     #Now get the card.
+def analyzeUser():
+     phoneName = "Rachel s iPhone"
+    vec,cats  = servercon.printTasteProfile(phoneName)
+
+    print('\n')
+    vals = vec.argsort()[-20:][::-1]
+    for val in vals:
+        print cats[val]
+
+    #Now least fav. 
+    print('\n')
+    vals = vec.argsort()[:10][::-1]
+    for val in vals:
+        try:
+            print cats[val]
+        except:
+            pass
+
 if __name__ == "__main__":
     myDb = TransDBConnector()
     myDb.connect()
@@ -204,3 +250,9 @@ if __name__ == "__main__":
 
     print("Testing....")
     testLoginAndSwipeSome()
+
+    #user_swipes = servercon.myDb.getUserSwipes(user,len(self.item_vectors))
+    #    self.user_vector[user] = computeUserVectorWithAverage(self.user_swipes[user],self.item_vectors)
+
+
+
