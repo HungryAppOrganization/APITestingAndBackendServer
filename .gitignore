@@ -3,3 +3,5 @@
 *.csv
 *.todo
 *.env
+!Rest_DB_2 - DB_4_21_server.csv
+
