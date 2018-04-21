@@ -66,6 +66,7 @@ class ServerConnector:
             allItems[i]['Price'] = (float(allItems[i]['Price'].replace('$','')) - priceMean)/priceUp
             myRow = allItems[i]
         allItemCategories = cleanList(allItemCategories)
+        self.allItemCategories = allItemCategories
         evalMethod = ['Price']
         allVecs = []
         for myRow in allItems:
@@ -173,8 +174,67 @@ class ServerConnector:
         print("Returning: " , retVal)
         return retVal
 
+    #This prints a user's taste profile
+    def printTasteProfile(self,phone_name):
+        allUsers = self.myDb.getAllUsers()
+        #print("All Users: " , allUsers)
+        user = None
+        if phone_name in allUsers:
+            #It's already in it, preload but it should be ready
+            user = phone_name
+        else:
+            #Create the entry into the DB
+            self.myDb.createUser(phone_name)
+            #Then set the next one. 
+            user = phone_name
+
+        self.user_swipes[user] = self.myDb.getUserSwipes(user,len(self.item_vectors))
+        self.user_vector[user] = computeUserVectorWithAverage(self.user_swipes[user],self.item_vectors)
+        print()
+        print(self.user_vector[user])
+        print(self.allItemCategories)
+        return self.user_vector[user] , self.allItemCategories
+
+
+
 print("Done Loading...")
 
+def analyzeUser(phoneName="Rachel s iPhone"):
+    vec,cats  = servercon.printTasteProfile(phoneName)
+    print('\n')
+    print("Vector: " , vec)
+    print("Cats  : ", cats)
+    saveUserPrefToFile(vec,cats,phoneName)
+    return
+    vals = vec.argsort()[-20:][::-1]
+    for val in vals:
+        print cats[val]
+
+    #Now least fav. 
+    print('\n')
+    vals = vec.argsort()[:10][::-1]
+    for val in vals:
+        try:
+            print cats[val]
+        except:
+            pass
+
+def analyzeAllUsers(myDb):
+    users = myDb.getAllUsers()
+    for user in users:
+        analyzeUser(str(user)
+
+)
+def saveUserPrefToFile(vec,cats,userName="test"):
+    print("Vecotr: " , vec)
+    print("Cats:   " , cats)
+    filename = "userdata/"+ userName + "_vec.csv"
+    np.savetxt(filename,vec,delimiter=",")
+    myfile = open("userdata/" + userName + "_cat.csv",'w')
+    for cat in cats:
+        myfile.write("\n " + str(cat))
+    myfile.flush()
+    myfile.close()
 
 def login(phoneName):
     return servercon.login(phoneName)
@@ -203,4 +263,6 @@ if __name__ == "__main__":
     servercon = ServerConnector(myDb)
 
     print("Testing....")
-    testLoginAndSwipeSome()
+    analyzeAllUsers(myDb)
+    analyzeUser()
+    #testLoginAndSwipeSome()

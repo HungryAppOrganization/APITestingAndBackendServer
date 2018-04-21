@@ -44,7 +44,7 @@ def login_method():
 def get_next_card():
     json = request.get_json()
 
-    time.sleep(0.5)
+    #time.sleep(0.5)
     print("My json:", json)
 
 
