@@ -13,6 +13,8 @@ FIREBASE_DOMAIN = os.environ.get("FIREBASE_DOMAIN")
 FIREBASE_DBURL = os.environ.get("FIREBASE_DBURL")
 FIREBASE_STORAGE = os.environ.get("FIREBASE_STORAGE")
 
+foodDatabaseName="foods_kc_1_15"
+
 #This program will handle dataentry into the DB, ensuring correct structure and offering an 'API' of sorts to making sure the transactions are completed appropriately.
 class TransDBConnector:
     def __init__(self):
@@ -113,9 +115,6 @@ class TransDBConnector:
     def getNextId(self,cat):
         #print("Category: " , cat)
         print(self.db.child(cat).order_by_child("id").limit_to_last(1).get().val()[0])
-
-
-
         idAssos = self.db.child(cat).order_by_child("id").limit_to_last(1).get().val().values()[0]['id']+1
         print("next id: " , idAssos)
         return idAssos
@@ -123,7 +122,7 @@ class TransDBConnector:
     def getNextCard(self,idToGet=None):
         if idToGet == None:
             idToGet = random.randint(50,350)
-        val = self.db.child("foods_kc_2_17").order_by_child("id").equal_to(idToGet).get().val().values()[0]
+        val = self.db.child(foodDatabaseName).order_by_child("id").equal_to(idToGet).get().val().values()[0]
         return val
 
     def getAllUsers(self):

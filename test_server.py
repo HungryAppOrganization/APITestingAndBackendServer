@@ -27,8 +27,10 @@ class ServerConnector:
     #For now, just do the csv. 
 
     def loadValues(self):
+
+        dataFile="Rest_DB_2 - DB_4_21_server.csv"
         
-        reader = csv.DictReader(open("Rest_DB_2-DB_2_17_rm_foodspotter_csv.csv",'rU'))
+        reader = csv.DictReader(open(dataFile,'rU'))
         allItemCategories = []
         allItems = []
         for row in reader:
@@ -67,10 +69,7 @@ class ServerConnector:
             allItems[i]['Price'] = (float(allItems[i]['Price'].replace('$','')) - priceMean)/priceUp
             myRow = allItems[i]
         allItemCategories = cleanList(allItemCategories)
-<<<<<<< HEAD
-=======
-        print(allItemCategories)
->>>>>>> 0dae24d76316041e65c3f1f707b3ec7d006b2ed7
+
         self.allItemCategories = allItemCategories
         evalMethod = ['Price']
         allVecs = []
@@ -311,16 +310,10 @@ if __name__ == "__main__":
     servercon = ServerConnector(myDb)
 
     print("Testing....")
-<<<<<<< HEAD
-    analyzeAllUsers(myDb)
-    analyzeUser()
+    #analyzeAllUsers(myDb)
+    #analyzeUser()
     #testLoginAndSwipeSome()
-=======
     testLoginAndSwipeSome()
 
     #user_swipes = servercon.myDb.getUserSwipes(user,len(self.item_vectors))
     #    self.user_vector[user] = computeUserVectorWithAverage(self.user_swipes[user],self.item_vectors)
-
-
-
->>>>>>> 0dae24d76316041e65c3f1f707b3ec7d006b2ed7
