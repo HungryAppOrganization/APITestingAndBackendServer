@@ -15,6 +15,10 @@ app = Flask(__name__)
 from trans_db import *
 from test_server import *
 
+#  John Peurifoy 4/21
+#   Note: This file has been modified for database tagging purposes
+#  See swipe_and_get, remove if. 
+
 myDb = TransDBConnector()
 myDb.connect()
 
@@ -90,6 +94,9 @@ def swipe_and_get():
     idToGet = servercon.swipe_and_getID(int(json['cardId']),int(json['swipeChoice']),tempUser)
 
     json = myDb.getNextCard(idToGet)
+    
+    if True:
+        idToGet = int(json['cardId'])+1.0
     json['id'] = idToGet
 
     print("returning:")
