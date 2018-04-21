@@ -63,7 +63,7 @@ class ServerConnector:
             if str(allItems[i]['Price']) == "":
 		allItems[i]["Price"] = "$0.00" 
         priceMean = sum([float(x['Price'].replace('$','')) for x in allItems])/len(allItems)
-        priceUp =max([abs(float(x['Price'].replace('$',''))-priceMean) for x in allItems])
+        priceUp =max(max([abs(float(x['Price'].replace('$',''))-priceMean) for x in allItems]),.001)
         #print(priceUp)
         for i in xrange(0,len(allItems)):
             allItems[i]['Price'] = (float(allItems[i]['Price'].replace('$','')) - priceMean)/priceUp
@@ -287,7 +287,7 @@ def testLoginAndSwipeSome():
 
     #Now get the card.
 def analyzeUser():
-     phoneName = "Rachel s iPhone"
+    phoneName = "Rachel s iPhone"
     vec,cats  = servercon.printTasteProfile(phoneName)
 
     print('\n')
