@@ -92,11 +92,10 @@ def swipe_and_get():
 
     tempUser = str(''.join([i if ord(i) < 128 else ' ' for i in json['username']]))
     idToGet = servercon.swipe_and_getID(int(json['cardId']),int(json['swipeChoice']),tempUser)
-
-    json = myDb.getNextCard(idToGet)
     
     if True:
         idToGet = int(json['cardId'])+1.0
+    json = myDb.getNextCard(idToGet)
     json['id'] = idToGet
 
     print("returning:")
