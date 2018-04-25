@@ -155,8 +155,8 @@ class TransDBConnector:
 
         print("Done updating swipes....")
 
-    def createUser(self,phone_name):
-        data = {"username":phone_name,"swipes":{"first":{"cardID":1,"swipe":1,"time":str(datetime.now())}}}
+    def createUser(self,phone_name,fId="",fToken="",eId="",pId=""):
+        data = {"username":phone_name,"fId":fId,"fToken":fToken,"eId":eId,"pId":pId,"swipes":{"first":{"cardID":1,"swipe":1,"time":str(datetime.now())}}}
         self.db.child("users").push(data)
 
 

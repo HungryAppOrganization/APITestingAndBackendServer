@@ -18,6 +18,7 @@ from test_server import *
 #  John Peurifoy 4/21
 #   Note: This file has been modified for database tagging purposes
 #  See swipe_and_get, remove if. 
+# John Peurifoy 4/22. I have set this to false and it should not trigger. 
 
 myDb = TransDBConnector()
 myDb.connect()
@@ -32,9 +33,13 @@ def login_method():
     print("Logging user in and storing the phone data")
     #tempUser = json['username'].decode('ascii','ignore')
     tempUser = str(''.join([i if ord(i) < 128 else ' ' for i in json['username']]))
+    fId = str(''.join([i if ord(i) < 128 else ' ' for i in json['fId']]))
+    fToken = str(''.join([i if ord(i) < 128 else ' ' for i in json['fToken']]))
+    eId = str(''.join([i if ord(i) < 128 else ' ' for i in json['eId']]))
+    pId = str(''.join([i if ord(i) < 128 else ' ' for i in json['pId']]))
     #tempUser = unicode(json['username']).replace("\r", " ").replace("\n", " ").replace("\t", '').replace("\"", "")
     print(tempUser)
-    servercon.login(tempUser)
+    servercon.login(tempUser,fId=fId,fToken=fToken,eId=eId,pId=pId)
     print("done logging in")
 
     #session['myNumber'] = random.randint(50,350)
@@ -93,7 +98,7 @@ def swipe_and_get():
     tempUser = str(''.join([i if ord(i) < 128 else ' ' for i in json['username']]))
     idToGet = servercon.swipe_and_getID(int(json['cardId']),int(json['swipeChoice']),tempUser)
     
-    if True:
+    if False:
         idToGet = int(json['cardId'])+1.0
     json = myDb.getNextCard(idToGet)
     json['id'] = idToGet

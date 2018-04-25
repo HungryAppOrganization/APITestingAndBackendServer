@@ -100,7 +100,7 @@ class ServerConnector:
     # This will also generate the first suggestion
     # This should decay all current preferences by 50%? Or won't that just be silly?
 
-    def login(self,phone_name):
+    def login(self,phone_name,fId="",fToken="",eId="",pId=""):
         print("Loging in: " , phone_name)
         ##Make sure the user is in the system, and preload first suggestion.
         allUsers = self.myDb.getAllUsers()
@@ -111,7 +111,7 @@ class ServerConnector:
             user = phone_name
         else:
             #Create the entry into the DB
-            self.myDb.createUser(phone_name)
+            self.myDb.createUser(phone_name,fId=fId,fToken=fToken,eId=eId,pId=pId)
             #Then set the next one. 
             user = phone_name
         self.user_swipes[user] = self.myDb.getUserSwipes(user,len(self.item_vectors))
