@@ -4,4 +4,5 @@
 *.todo
 *.env
 !Rest_DB_2 - DB_4_21_server.csv
+!Rest_DB_2 - DB_4_24_server.csv
 
