@@ -28,7 +28,7 @@ class ServerConnector:
 
     def loadValues(self):
 
-        dataFile="Rest_DB_2 - DB_4_21_server.csv"
+        dataFile="Rest_DB_2 - DB_4_24_server.csv"
         
         reader = csv.DictReader(open(dataFile,'rU'))
         allItemCategories = []
@@ -51,8 +51,21 @@ class ServerConnector:
             allItemCategories.append(row['Item9'])
             allItemCategories.append(row['Item10'])
             allItemCategories.append(row['Item11'])
-            allItemCategories.append(row['Item12'])
-
+            allItemCategories.append(row['Item13'])
+            allItemCategories.append(row['Item14'])
+            allItemCategories.append(row['Item15'])
+            allItemCategories.append(row['Item16'])
+            allItemCategories.append(row['Item17'])
+            allItemCategories.append(row['Item18'])
+            allItemCategories.append(row['Item19'])
+            allItemCategories.append(row['Item20'])
+            allItemCategories.append(row['Item21'])
+            allItemCategories.append(row['Item22'])
+            allItemCategories.append(row['Item23'])
+            allItemCategories.append(row['Item24'])
+            allItemCategories.append(row['Item25'])
+            allItemCategories.append(row['Item26'])
+            allItemCategories.append(row['Item27'])
             allItemCategories.append(row['Genre'])
             allItemCategories.append(row['Class'])
             allItemCategories.append(row['Type_of_meal'])
