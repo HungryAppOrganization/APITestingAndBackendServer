@@ -28,7 +28,7 @@ class ServerConnector:
 
     def loadValues(self):
 
-        dataFile="Rest_DB_2 - DB_4_24_server.csv"
+        dataFile="Rest_DB_2 - Complete_DB_5_5_server.csv"
         
         reader = csv.DictReader(open(dataFile,'rU'))
         allItemCategories = []
@@ -62,12 +62,9 @@ class ServerConnector:
             allItemCategories.append(row['Item21'])
             allItemCategories.append(row['Item22'])
             allItemCategories.append(row['Item23'])
-            allItemCategories.append(row['Item24'])
-            allItemCategories.append(row['Item25'])
-            allItemCategories.append(row['Item26'])
-            allItemCategories.append(row['Item27'])
             allItemCategories.append(row['Genre'])
-            allItemCategories.append(row['Class'])
+            allItemCategories.append(row['Class1'])
+            allItemCategories.append(row['Class2'])
             allItemCategories.append(row['Type_of_meal'])
             allItemCategories.append(row['Dietary'])
         #Now go through and fix the price/zipCode (normalize it)
