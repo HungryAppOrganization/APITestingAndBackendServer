@@ -28,7 +28,7 @@ class ServerConnector:
 
     def loadValues(self):
 
-        dataFile="Rest_DB_2 - Complete_DB_5_5_server.csv"
+        dataFile="Rest_DB_2 - Complete_DB_5_7_server.csv"
         
         reader = csv.DictReader(open(dataFile,'rU'))
         allItemCategories = []
