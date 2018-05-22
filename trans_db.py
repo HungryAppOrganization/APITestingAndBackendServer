@@ -114,9 +114,9 @@ class TransDBConnector:
 
     def getNextId(self,cat):
         #print("Category: " , cat)
-        print(self.db.child(cat).order_by_child("id").limit_to_last(1).get().val()[0])
+        #print(self.db.child(cat).order_by_child("id").limit_to_last(1).get().val()[0])
         idAssos = self.db.child(cat).order_by_child("id").limit_to_last(1).get().val().values()[0]['id']+1
-        print("next id: " , idAssos)
+        #print("next id: " , idAssos)
         return idAssos
 
     def getNextCard(self,idToGet=None):
@@ -129,13 +129,13 @@ class TransDBConnector:
         #This returns all the users in a list of the usernames
         vals = self.db.child("users").get().val().values()
         usernames = [str(val['username']) for val in vals]
-        print(usernames)
+        #print(usernames)
         return usernames
 
     def getUserSwipes(self,userName,numberItems):
         user_swipes = np.zeros(numberItems)
         #Now get the swipes
-        print("username: " , userName)
+        #print("username: " , userName)
         val = self.db.child("users").order_by_child("username").equal_to(userName).get().val().values()[0]['swipes'].values()
         for swipe in val:
             listId = int(swipe['cardID'])
